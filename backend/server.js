@@ -34,8 +34,11 @@ app.get('/admin.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin.html'));
 });
 
-// 数据库初始化：固定到项目内同一DB文件，避免cwd不同导致多份库
-const db = new sqlite3.Database(path.join(__dirname, '../customer_system.db'));
+// 数据库初始化：适配Vercel环境
+const dbPath = process.env.VERCEL 
+    ? '/tmp/customer_system.db' 
+    : path.join(__dirname, '../customer_system.db');
+const db = new sqlite3.Database(dbPath);
 
 // 创建表
 db.serialize(() => {
@@ -1362,11 +1365,13 @@ app.post('/api/parse-address-test', async (req, res) => {
     }
 });
 
-// 启动服务器
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`服务器运行在端口 ${PORT}`);
-    console.log(`访问 http://localhost:${PORT} 查看系统`);
-    console.log(`手机访问: http://192.168.1.3:${PORT}`);
-});
+// 启动服务器（仅在非Vercel环境下）
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`服务器运行在端口 ${PORT}`);
+        console.log(`访问 http://localhost:${PORT} 查看系统`);
+        console.log(`手机访问: http://192.168.1.3:${PORT}`);
+    });
+}
 
 module.exports = app;

@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "build": "echo 'Build completed'",
-    "install-deps": "npm install"
+    "build": "mkdir -p public && cp -r frontend/* public/",
+    "install-deps": "npm install",
+    "vercel-build": "mkdir -p public && cp -r frontend/* public/"
   },
   "keywords": ["customer", "management", "crm", "客服系统"],
   "author": "AI Assistant",
