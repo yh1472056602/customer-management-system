@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员后台 - 尔升网络</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar" id="announcementBar">
+        <div class="announcement-content">
+            <span id="announcementText">欢迎使用尔升网络客户管理系统</span>
+            <button onclick="showAddAnnouncement()" class="add-announcement-btn"><i class="fas fa-bullhorn"></i> 添加公告</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMTUwIj48c3R5bGU+LnN0MHtmaWxsOiMxYTU2ZGJ9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTAwIDEwYy00OS43IDAtOTAgNDAuMy05MCA5MHM0MC4zIDkwIDkwIDkwIDkwLTQwLjMgOTAtOTAtNDAuMy05MC05MC05MHptMCAxNjBjLTM4LjYgMC03MC0zMS40LTcwLTcwczMxLjQtNzAgNzAtNzAgNzAgMzEuNCA3MCA3MC0zMS40IDcwLTcwIDcweiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMDAgNTBjLTI3LjYgMC01MCAyMi40LTUwIDUwczIyLjQgNTAgNTAgNTBjMTIuOSAwIDI0LjctNC45IDMzLjYtMTNsMjguMyAyOC4zYzIgMiA1LjEgMiA3LjEgMHMyLTUuMSAwLTcuMWwtMjguMy0yOC4zYzguMS04LjkgMTMtMjAuNyAxMy0zMy42IDAtMjcuNS0yMi40LTQ5LjktNTAtNDkuOXptMCA4MGMtMTYuNSAwLTMwLTEzLjUtMzAtMzBzMTMuNS0zMCAzMC0zMCAzMCAxMy41IDMwIDMwLTEzLjUgMzAtMzAgMzB6Ii8+PC9zdmc+" alt="尔升网络" class="company-logo">
+                <span class="logo-text">尔升网络</span>
+            </div>
+            <div class="nav-links">
+                <button onclick="showSection('overview')" class="nav-btn active"><i class="fas fa-tachometer-alt"></i> 总览</button>
+                <button onclick="showSection('users')" class="nav-btn"><i class="fas fa-users-cog"></i> 用户管理</button>
+                <button onclick="showSection('statistics')" class="nav-btn"><i class="fas fa-chart-bar"></i> 数据统计</button>
+                <button onclick="showSection('private-stats')" class="nav-btn"><i class="fas fa-user-friends"></i> 私域统计</button>
+                <button onclick="showSection('export')" class="nav-btn"><i class="fas fa-file-export"></i> 数据导出</button>
+                <button onclick="logout()" class="nav-btn logout-btn"><i class="fas fa-sign-out-alt"></i> 退出登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="page-title"><i class="fas fa-user-shield"></i> 管理员后台</h2>
+        
+        <!-- 总览 -->
+        <div id="overview" class="section active">
+            <h3><i class="fas fa-tachometer-alt"></i> 系统总览</h3>
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h4>总用户数</h4>
+                    <p id="totalUsers">0</p>
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>总客户数</h4>
+                    <p id="totalCustomers">0</p>
+                    <i class="fas fa-address-book"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>总订单数</h4>
+                    <p id="totalOrders">0</p>
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>总销售额</h4>
+                    <p id="totalSales">¥0.00</p>
+                    <i class="fas fa-yen-sign"></i>
+                </div>
+            </div>
+
+            <div class="data-table">
+                <h4><i class="fas fa-history"></i> 最近订单</h4>
+                
+                <table id="recentOrdersTable">
+                    <thead>
+                        <tr>
+                            <th>订单ID</th>
+                            <th>收件人姓名</th>
+                            <th>产品名称</th>
+                            <th>数量</th>
+                            <th>金额</th>
+                            <th>客服</th>
+                            <th>时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersBody">
+                    </tbody>
+                </table>
+                <div id="pagination" class="pagination">
+                    <!-- 分页控件将在这里生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户管理 -->
+        <div id="users" class="section">
+            <h3><i class="fas fa-users-cog"></i> 用户管理</h3>
+            <div class="data-table">
+                <div class="table-actions">
+                    <button onclick="showAddUserModal()" class="action-btn"><i class="fas fa-user-plus"></i> 添加用户</button>
+                </div>
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>角色</th>
+                            <th>创建时间</th>
+                            <th>上次登录</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 数据统计 -->
+        <div id="statistics" class="section">
+            <h3><i class="fas fa-chart-bar"></i> 数据统计</h3>
+            
+            <div class="filter-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="statStartDate">开始日期</label>
+                        <input type="date" id="statStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="statEndDate">结束日期</label>
+                        <input type="date" id="statEndDate">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button onclick="generateStatistics()" class="search-btn"><i class="fas fa-sync-alt"></i> 生成统计</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h4>期间订单数</h4>
+                    <p id="periodOrders">0</p>
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>期间销售额</h4>
+                    <p id="periodSales">¥0.00</p>
+                    <i class="fas fa-yen-sign"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>日均订单数</h4>
+                    <p id="avgDailyOrders">0</p>
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>客单价</h4>
+                    <p id="avgOrderValue">¥0.00</p>
+                    <i class="fas fa-receipt"></i>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-line"></i> 订单趋势</h4>
+                    <div id="orderTrendChart" class="chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-pie"></i> 产品分布</h4>
+                    <div id="productDistributionChart" class="chart"></div>
+                </div>
+            </div>
+            
+            <div class="data-table">
+                <h4><i class="fas fa-user-tie"></i> 客服业绩</h4>
+                <table id="performanceTable">
+                    <thead>
+                        <tr>
+                            <th>客服</th>
+                            <th>订单数</th>
+                            <th>销售额</th>
+                            <th>客户数</th>
+                            <th>平均客单价</th>
+                        </tr>
+                    </thead>
+                    <tbody id="performanceTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 私域统计 -->
+        <div id="private-stats" class="section">
+            <h3><i class="fas fa-user-friends"></i> 私域数据统计</h3>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h4>私域客户总数</h4>
+                    <p id="totalPrivateCustomers">0</p>
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>本月新增客户</h4>
+                    <p id="newPrivateCustomers">0</p>
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>私域转化率</h4>
+                    <p id="privateConversionRate">0%</p>
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>私域客户贡献</h4>
+                    <p id="privateContribution">¥0.00</p>
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-line"></i> 客户增长趋势</h4>
+                    <div id="customerGrowthChart" class="chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-pie"></i> 客户来源分布</h4>
+                    <div id="customerSourceChart" class="chart"></div>
+                </div>
+            </div>
+            
+            <div class="data-table">
+                <h4><i class="fas fa-star"></i> 高价值客户</h4>
+                <table id="vipCustomersTable">
+                    <thead>
+                        <tr>
+                            <th>客户</th>
+                            <th>电话</th>
+                            <th>订单数</th>
+                            <th>总消费</th>
+                            <th>最近购买</th>
+                            <th>来源</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vipCustomersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 数据导出 -->
+        <div id="export" class="section">
+            <h3><i class="fas fa-file-export"></i> 数据导出</h3>
+            
+            <div class="export-info">
+                <h4><i class="fas fa-info-circle"></i> 导出说明</h4>
+                <ul>
+                    <li>系统支持多种格式导出，包括Excel、CSV和PDF</li>
+                    <li>可以按照时间范围、客服、产品类型等条件筛选数据</li>
+                    <li>导出的数据将包含所有订单详细信息</li>
+                    <li>私域客户数据可单独导出</li>
+                </ul>
+            </div>
+            
+            <div class="filter-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exportStartDate">开始日期</label>
+                        <input type="date" id="exportStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="exportEndDate">结束日期</label>
+                        <input type="date" id="exportEndDate">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exportCustomerService">客服筛选</label>
+                        <select id="exportCustomerService">
+                            <option value="">全部客服</option>
+                            <!-- 客服选项将通过JavaScript动态生成 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exportFormat">导出格式</label>
+                        <select id="exportFormat">
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                            <option value="pdf">PDF</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button onclick="exportData('orders')" class="export-btn"><i class="fas fa-file-export"></i> 导出订单数据</button>
+                        <button onclick="exportData('customers')" class="export-btn" style="margin-left: 10px;"><i class="fas fa-users"></i> 导出客户数据</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-table">
+                <h4><i class="fas fa-history"></i> 导出记录</h4>
+                <table id="exportHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>数据类型</th>
+                            <th>导出格式</th>
+                            <th>记录数量</th>
+                            <th>导出时间</th>
+                            <th>操作人</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="exportHistoryTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 尔升网络 版权所有</p>
+    </div>
+
+    <!-- 添加公告模态框 -->
+    <div id="addAnnouncementModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addAnnouncementModal')">&times;</span>
+            <h3><i class="fas fa-bullhorn"></i> 添加系统公告</h3>
+            <form id="announcementForm">
+                <div class="form-group">
+                    <label for="announcementContent">公告内容</label>
+                    <textarea id="announcementContent" rows="3" required placeholder="请输入公告内容"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="announcementDuration">显示时长（天）</label>
+                    <input type="number" id="announcementDuration" min="1" value="7" placeholder="公告显示天数">
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存公告</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+    <!-- 添加用户模态框 -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addUserModal')">&times;</span>
+            <h3><i class="fas fa-user-plus"></i> 添加用户</h3>
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label for="newUsername">用户名</label>
+                    <input type="text" id="newUsername" required placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">密码</label>
+                    <input type="password" id="newPassword" required placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <label for="newRole">角色</label>
+                    <select id="newRole" required>
+                        <option value="">请选择角色</option>
+                        <option value="customer_service">客服</option>
+                        <option value="admin">管理员</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 添加用户</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 编辑用户模态框 -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editUserModal')">&times;</span>
+            <h3><i class="fas fa-user-edit"></i> 编辑用户</h3>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editUsername">用户名</label>
+                    <input type="text" id="editUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">新密码（留空则不修改）</label>
+                    <input type="password" id="editPassword" placeholder="留空则不修改密码">
+                </div>
+                <div class="form-group">
+                    <label for="editRole">角色</label>
+                    <select id="editRole" required>
+                        <option value="customer_service">客服</option>
+                        <option value="admin">管理员</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">状态</label>
+                    <select id="editStatus" required>
+                        <option value="active">激活</option>
+                        <option value="inactive">停用</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存修改</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../modern-ui/js/compatibility.js"></script>
+    <script src="../js/admin.js"></script>
+    
+    <script src="../js/announcements.js"></script>
+    <script src="../modern-ui/js/modern-components.js"></script>
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化页面效果
+            initPageEffects();
+            
+            // 模拟图表数据（实际项目中应从后端获取）
+            initCharts();
+        });
+        
+        // 初始化页面效果
+        function initPageEffects() {
+            // 添加表单输入增强
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                // 聚焦时添加高亮效果
+                input.addEventListener('focus', function() {
+                    const formGroup = this.closest('.form-group');
+                    if (formGroup) formGroup.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    const formGroup = this.closest('.form-group');
+                    if (formGroup) formGroup.classList.remove('focused');
+                });
+            });
+            
+            // 添加按钮悬停效果
+            const buttons = document.querySelectorAll('.btn-primary, .action-btn, .export-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('hover-effect');
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('hover-effect');
+                });
+            });
+        }
+        
+        // 显示不同的区域
+        function showSection(sectionId) {
+            // 隐藏所有区域
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的区域
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 找到并激活对应的导航按钮
+            document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+        
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // 显示添加用户模态框
+        function showAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'block';
+        }
+        
+        // 初始化图表（模拟数据）
+        function initCharts() {
+            // 在实际项目中，这里应该使用图表库如Chart.js或ECharts
+            // 这里只是添加占位元素
+            const charts = document.querySelectorAll('.chart');
+            charts.forEach(chart => {
+                chart.innerHTML = '<div class="chart-placeholder"><i class="fas fa-chart-line"></i><p>图表将在这里显示</p></div>';
+            });
+        }
+        
+        // 添加样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .chart-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+                gap: var(--spacing-6);
+                margin: var(--spacing-8) 0;
+            }
+            
+            .chart-card {
+                background-color: var(--card-background);
+                border-radius: var(--border-radius-lg);
+                box-shadow: var(--shadow);
+                padding: var(--spacing-6);
+            }
+            
+            .chart-card h4 {
+                font-size: 1rem;
+                margin-bottom: var(--spacing-4);
+                color: var(--gray-800);
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-2);
+            }
+            
+            .chart-card h4 i {
+                color: var(--primary-color);
+            }
+            
+            .chart {
+                height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .chart-placeholder {
+                text-align: center;
+                color: var(--gray-400);
+            }
+            
+            .chart-placeholder i {
+                font-size: 48px;
+                margin-bottom: var(--spacing-4);
+            }
+            
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: var(--spacing-6);
+                gap: var(--spacing-2);
+            }
+            
+            .page-btn {
+                background-color: var(--gray-100);
+                border: 1px solid var(--gray-200);
+                color: var(--gray-700);
+                padding: var(--spacing-2) var(--spacing-3);
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                transition: all var(--transition-fast);
+            }
+            
+            .page-btn:hover {
+                background-color: var(--gray-200);
+            }
+            
+            .page-btn.active {
+                background-color: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+            }
+            
+            .focused {
+                position: relative;
+            }
+            
+            .focused::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 3px;
+                height: 100%;
+                background-color: var(--primary-color);
+                border-radius: 3px;
+            }
+            
+            .hover-effect {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

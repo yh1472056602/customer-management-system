@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>移动端测试页面 - 尔升网络</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="css/mobile-optimized.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+        }
+        
+        .test-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .device-info {
+            background-color: var(--gray-50);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .test-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .test-result {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.875rem;
+        }
+        
+        .test-pass {
+            background-color: var(--success-light-color);
+            color: var(--success-color);
+        }
+        
+        .test-fail {
+            background-color: var(--danger-light-color);
+            color: var(--danger-color);
+        }
+        
+        .sample-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .sample-table th,
+        .sample-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .sample-table th {
+            background-color: var(--gray-50);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span>移动端功能测试页面</span>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMTUwIj48c3R5bGU+LnN0MHtmaWxsOiMxYTU2ZGJ9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTAwIDEwYy00OS43IDAtOTAgNDAuMy05MCA5MHM0MC4zIDkwIDkwIDkwIDkwLTQwLjMgOTAtOTAtNDAuMy05MC05MC05MHptMCAxNjBjLTM4LjYgMC03MC0zMS40LTcwLTcwczMxLjQtNzAgNzAtNzAgNzAgMzEuNCA3MCA3MC0zMS40IDcwLTcwIDcweiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMDAgNTBjLTI3LjYgMC01MCAyMi40LTUwIDUwczIyLjQgNTAgNTAgNTBjMTIuOSAwIDI0LjctNC45IDMzLjYtMTNsMjguMyAyOC4zYzIgMiA1LjEgMiA3LjEgMHMyLTUuMSAwLTcuMWwtMjguMy0yOC4zYzguMS04LjkgMTMtMjAuNyAxMy0zMy42IDAtMjcuNS0yMi40LTQ5LjktNTAtNDkuOXptMCA4MGMtMTYuNSAwLTMwLTEzLjUtMzAtMzBzMTMuNS0zMCAzMC0zMCAzMCAxMy41IDMwIDMwLTEzLjUgMzAtMzAgMzB6Ii8+PC9zdmc+" alt="尔升网络" class="company-logo">
+                <span class="logo-text">移动端测试</span>
+            </div>
+            <div class="nav-links">
+                <button onclick="showSection('device-info')" class="nav-btn active"><i class="fas fa-mobile-alt"></i> 设备信息</button>
+                <button onclick="showSection('ui-test')" class="nav-btn"><i class="fas fa-palette"></i> 界面测试</button>
+                <button onclick="showSection('table-test')" class="nav-btn"><i class="fas fa-table"></i> 表格测试</button>
+                <button onclick="showSection('form-test')" class="nav-btn"><i class="fas fa-edit"></i> 表单测试</button>
+                <button onclick="showSection('gesture-test')" class="nav-btn"><i class="fas fa-hand-paper"></i> 手势测试</button>
+                <button onclick="showSection('performance-test')" class="nav-btn"><i class="fas fa-tachometer-alt"></i> 性能测试</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="page-title"><i class="fas fa-mobile-alt"></i> 移动端功能测试</h2>
+        
+        <!-- 设备信息 -->
+        <div id="device-info" class="section active">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-info-circle"></i> 设备信息</h3>
+                <div class="device-info" id="deviceInfoContent">
+                    <!-- 设备信息将通过JavaScript填充 -->
+                </div>
+            </div>
+            
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-check-circle"></i> 兼容性检测</h3>
+                <div class="test-grid" id="compatibilityTests">
+                    <!-- 兼容性测试结果将通过JavaScript填充 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 界面测试 -->
+        <div id="ui-test" class="section">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-palette"></i> 界面元素测试</h3>
+                
+                <h4>按钮测试</h4>
+                <div class="test-grid">
+                    <button class="btn-primary"><i class="fas fa-save"></i> 主要按钮</button>
+                    <button class="action-btn"><i class="fas fa-edit"></i> 操作按钮</button>
+                    <button class="parse-btn"><i class="fas fa-magic"></i> 解析按钮</button>
+                    <button class="search-btn"><i class="fas fa-search"></i> 搜索按钮</button>
+                </div>
+                
+                <h4>统计卡片测试</h4>
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h4>今日订单</h4>
+                        <p>128</p>
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h4>本周订单</h4>
+                        <p>856</p>
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h4>本月订单</h4>
+                        <p>3,247</p>
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h4>总销售额</h4>
+                        <p>¥45,678.90</p>
+                        <i class="fas fa-yen-sign"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 表格测试 -->
+        <div id="table-test" class="section">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-table"></i> 表格卡片化测试</h3>
+                
+                <div class="data-table">
+                    <h4><i class="fas fa-list"></i> 示例订单表格</h4>
+                    <div class="table-actions">
+                        <button class="action-btn"><i class="fas fa-plus"></i> 添加订单</button>
+                        <button class="action-btn excel-btn"><i class="fas fa-file-excel"></i> 导出Excel</button>
+                    </div>
+                    
+                    <table class="sample-table" id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th>订单ID</th>
+                                <th>客户姓名</th>
+                                <th>电话</th>
+                                <th>地址</th>
+                                <th>商品</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>001</td>
+                                <td>张三</td>
+                                <td>13800138000</td>
+                                <td>北京市朝阳区</td>
+                                <td>测试商品A</td>
+                                <td>¥99.00</td>
+                                <td><span class="status-complete"><i class="fas fa-check"></i> 已完成</span></td>
+                                <td>
+                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>002</td>
+                                <td>李四</td>
+                                <td>13900139000</td>
+                                <td>上海市浦东新区</td>
+                                <td>测试商品B</td>
+                                <td>¥158.00</td>
+                                <td><span class="status-incomplete"><i class="fas fa-clock"></i> 处理中</span></td>
+                                <td>
+                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>003</td>
+                                <td>王五</td>
+                                <td>13700137000</td>
+                                <td>广州市天河区</td>
+                                <td>测试商品C</td>
+                                <td>¥268.00</td>
+                                <td><span class="status-complete"><i class="fas fa-check"></i> 已完成</span></td>
+                                <td>
+                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 表单测试 -->
+        <div id="form-test" class="section">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-edit"></i> 表单测试</h3>
+                
+                <form id="testForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testName">姓名 <span style="color: var(--danger-color);">*</span></label>
+                            <input type="text" id="testName" required placeholder="请输入姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="testPhone">电话</label>
+                            <input type="tel" id="testPhone" placeholder="请输入电话号码">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testEmail">邮箱</label>
+                            <input type="email" id="testEmail" placeholder="请输入邮箱地址">
+                        </div>
+                        <div class="form-group">
+                            <label for="testDate">日期</label>
+                            <input type="date" id="testDate">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testSelect">选择项</label>
+                            <select id="testSelect">
+                                <option value="">请选择</option>
+                                <option value="option1">选项1</option>
+                                <option value="option2">选项2</option>
+                                <option value="option3">选项3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="testNumber">数量</label>
+                            <input type="number" id="testNumber" min="1" value="1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testTextarea">备注</label>
+                            <textarea id="testTextarea" rows="3" placeholder="请输入备注信息"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testFile">文件上传</label>
+                            <input type="file" id="testFile" accept=".xlsx,.xls,.csv">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 提交表单</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 手势测试 -->
+        <div id="gesture-test" class="section">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-hand-paper"></i> 手势操作测试</h3>
+                
+                <div class="device-info">
+                    <p><strong>测试说明：</strong></p>
+                    <ul>
+                        <li>在导航区域左右滑动可以切换标签页</li>
+                        <li>点击底部导航栏的按钮测试快捷功能</li>
+                        <li>长按某些元素可能会显示上下文菜单</li>
+                        <li>双击可以快速缩放（如果支持）</li>
+                    </ul>
+                </div>
+                
+                <div id="gestureTestArea" style="height: 200px; background-color: var(--gray-50); border: 2px dashed var(--gray-300); display: flex; align-items: center; justify-content: center; margin: 1rem 0; border-radius: var(--border-radius);">
+                    <div style="text-align: center; color: var(--gray-500);">
+                        <i class="fas fa-hand-paper" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <p>在此区域测试触摸手势</p>
+                        <p id="gestureResult" style="font-size: 0.875rem; margin-top: 0.5rem;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 性能测试 -->
+        <div id="performance-test" class="section">
+            <div class="test-section">
+                <h3 class="test-title"><i class="fas fa-tachometer-alt"></i> 性能测试</h3>
+                
+                <div class="test-grid">
+                    <div class="test-card">
+                        <h4>页面加载时间</h4>
+                        <p id="loadTime">测试中...</p>
+                        <div class="test-result" id="loadTimeResult"></div>
+                    </div>
+                    <div class="test-card">
+                        <h4>内存使用</h4>
+                        <p id="memoryUsage">测试中...</p>
+                        <div class="test-result" id="memoryResult"></div>
+                    </div>
+                    <div class="test-card">
+                        <h4>网络状态</h4>
+                        <p id="networkStatus">检测中...</p>
+                        <div class="test-result" id="networkResult"></div>
+                    </div>
+                    <div class="test-card">
+                        <h4>电池状态</h4>
+                        <p id="batteryStatus">检测中...</p>
+                        <div class="test-result" id="batteryResult"></div>
+                    </div>
+                </div>
+                
+                <button onclick="runPerformanceTest()" class="btn-primary" style="margin-top: 1rem;">
+                    <i class="fas fa-play"></i> 运行性能测试
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 尔升网络 移动端测试页面</p>
+    </div>
+
+    <script src="../modern-ui/js/compatibility.js"></script>
+    <script src="../modern-ui/js/modern-components.js"></script>
+    <script src="js/mobile-table-adapter.js"></script>
+    <script src="js/mobile-navigation.js"></script>
+    
+    <script>
+        // 页面加载时间记录
+        const pageLoadStart = performance.now();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageLoadEnd = performance.now();
+            const loadTime = Math.round(pageLoadEnd - pageLoadStart);
+            
+            // 初始化测试
+            initDeviceInfo();
+            initCompatibilityTests();
+            initGestureTest();
+            initPerformanceTest(loadTime);
+            
+            // 防止表单提交
+            document.getElementById('testForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('表单测试成功！所有字段都能正常输入。');
+            });
+        });
+        
+        // 显示不同的区域
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+        
+        // 初始化设备信息
+        function initDeviceInfo() {
+            const deviceInfo = document.getElementById('deviceInfoContent');
+            const info = {
+                '用户代理': navigator.userAgent,
+                '屏幕尺寸': `${screen.width} × ${screen.height}`,
+                '视口尺寸': `${window.innerWidth} × ${window.innerHeight}`,
+                '设备像素比': window.devicePixelRatio || 1,
+                '触摸支持': 'ontouchstart' in window ? '是' : '否',
+                '在线状态': navigator.onLine ? '在线' : '离线',
+                '语言': navigator.language,
+                '平台': navigator.platform,
+                '内存': navigator.deviceMemory ? `${navigator.deviceMemory}GB` : '未知',
+                '连接类型': navigator.connection ? navigator.connection.effectiveType : '未知'
+            };
+            
+            let html = '<div style="display: grid; gap: 0.5rem;">';
+            for (const [key, value] of Object.entries(info)) {
+                html += `<div><strong>${key}:</strong> ${value}</div>`;
+            }
+            html += '</div>';
+            
+            deviceInfo.innerHTML = html;
+        }
+        
+        // 初始化兼容性测试
+        function initCompatibilityTests() {
+            const container = document.getElementById('compatibilityTests');
+            const tests = [
+                {
+                    name: 'CSS Grid',
+                    test: () => CSS.supports('display', 'grid')
+                },
+                {
+                    name: 'Flexbox',
+                    test: () => CSS.supports('display', 'flex')
+                },
+                {
+                    name: 'CSS变量',
+                    test: () => CSS.supports('color', 'var(--test)')
+                },
+                {
+                    name: '触摸事件',
+                    test: () => 'ontouchstart' in window
+                },
+                {
+                    name: 'Service Worker',
+                    test: () => 'serviceWorker' in navigator
+                },
+                {
+                    name: 'Local Storage',
+                    test: () => typeof Storage !== 'undefined'
+                },
+                {
+                    name: 'Geolocation',
+                    test: () => 'geolocation' in navigator
+                },
+                {
+                    name: 'WebGL',
+                    test: () => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+                        } catch (e) {
+                            return false;
+                        }
+                    }
+                }
+            ];
+            
+            let html = '';
+            tests.forEach(test => {
+                const result = test.test();
+                html += `
+                    <div class="test-card">
+                        <h4>${test.name}</h4>
+                        <div class="test-result ${result ? 'test-pass' : 'test-fail'}">
+                            <i class="fas fa-${result ? 'check' : 'times'}"></i>
+                            ${result ? '支持' : '不支持'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 初始化手势测试
+        function initGestureTest() {
+            const testArea = document.getElementById('gestureTestArea');
+            const result = document.getElementById('gestureResult');
+            
+            let startX, startY, startTime;
+            
+            testArea.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startTime = Date.now();
+                result.textContent = '触摸开始...';
+            });
+            
+            testArea.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                const deltaX = currentX - startX;
+                const deltaY = currentY - startY;
+                
+                result.textContent = `移动中... X:${Math.round(deltaX)}, Y:${Math.round(deltaY)}`;
+            });
+            
+            testArea.addEventListener('touchend', function(e) {
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                result.textContent = `触摸结束，持续时间: ${duration}ms`;
+            });
+            
+            // 鼠标事件（用于桌面测试）
+            testArea.addEventListener('mousedown', function(e) {
+                startX = e.clientX;
+                startY = e.clientY;
+                startTime = Date.now();
+                result.textContent = '鼠标按下...';
+            });
+            
+            testArea.addEventListener('mousemove', function(e) {
+                if (startX !== undefined) {
+                    const deltaX = e.clientX - startX;
+                    const deltaY = e.clientY - startY;
+                    result.textContent = `鼠标移动... X:${Math.round(deltaX)}, Y:${Math.round(deltaY)}`;
+                }
+            });
+            
+            testArea.addEventListener('mouseup', function(e) {
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                result.textContent = `鼠标释放，持续时间: ${duration}ms`;
+                startX = undefined;
+                startY = undefined;
+            });
+        }
+        
+        // 初始化性能测试
+        function initPerformanceTest(loadTime) {
+            document.getElementById('loadTime').textContent = `${loadTime}ms`;
+            document.getElementById('loadTimeResult').className = `test-result ${loadTime < 2000 ? 'test-pass' : 'test-fail'}`;
+            document.getElementById('loadTimeResult').innerHTML = `<i class="fas fa-${loadTime < 2000 ? 'check' : 'times'}"></i> ${loadTime < 2000 ? '良好' : '需要优化'}`;
+            
+            // 检测网络状态
+            const networkStatus = navigator.onLine ? '在线' : '离线';
+            document.getElementById('networkStatus').textContent = networkStatus;
+            document.getElementById('networkResult').className = `test-result ${navigator.onLine ? 'test-pass' : 'test-fail'}`;
+            document.getElementById('networkResult').innerHTML = `<i class="fas fa-${navigator.onLine ? 'wifi' : 'times'}"></i> ${networkStatus}`;
+        }
+        
+        // 运行性能测试
+        function runPerformanceTest() {
+            // 内存测试
+            if (performance.memory) {
+                const memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                document.getElementById('memoryUsage').textContent = `${memoryUsage}MB`;
+                document.getElementById('memoryResult').className = `test-result ${memoryUsage < 50 ? 'test-pass' : 'test-fail'}`;
+                document.getElementById('memoryResult').innerHTML = `<i class="fas fa-${memoryUsage < 50 ? 'check' : 'times'}"></i> ${memoryUsage < 50 ? '正常' : '偏高'}`;
+            } else {
+                document.getElementById('memoryUsage').textContent = '不支持';
+                document.getElementById('memoryResult').className = 'test-result test-fail';
+                document.getElementById('memoryResult').innerHTML = '<i class="fas fa-times"></i> 不支持';
+            }
+            
+            // 电池测试
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(function(battery) {
+                    const batteryLevel = Math.round(battery.level * 100);
+                    document.getElementById('batteryStatus').textContent = `${batteryLevel}%`;
+                    document.getElementById('batteryResult').className = `test-result ${batteryLevel > 20 ? 'test-pass' : 'test-fail'}`;
+                    document.getElementById('batteryResult').innerHTML = `<i class="fas fa-${batteryLevel > 20 ? 'battery-full' : 'battery-empty'}"></i> ${battery.charging ? '充电中' : '未充电'}`;
+                });
+            } else {
+                document.getElementById('batteryStatus').textContent = '不支持';
+                document.getElementById('batteryResult').className = 'test-result test-fail';
+                document.getElementById('batteryResult').innerHTML = '<i class="fas fa-times"></i> 不支持';
+            }
+        }
+    </script>
+</body>
+</html>

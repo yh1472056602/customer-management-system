@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尔升网络 - 客户管理系统</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar" id="announcementBar">
+        <div class="announcement-content">
+            <span id="announcementText">欢迎使用尔升网络客户管理系统</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="login-form">
+            <div class="login-header">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMTUwIj48c3R5bGU+LnN0MHtmaWxsOiMxYTU2ZGJ9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTAwIDEwYy00OS43IDAtOTAgNDAuMy05MCA5MHM0MC4zIDkwIDkwIDkwIDkwLTQwLjMgOTAtOTAtNDAuMy05MC05MC05MHptMCAxNjBjLTM4LjYgMC03MC0zMS40LTcwLTcwczMxLjQtNzAgNzAtNzAgNzAgMzEuNCA3MCA3MC0zMS40IDcwLTcwIDcweiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMDAgNTBjLTI3LjYgMC01MCAyMi40LTUwIDUwczIyLjQgNTAgNTAgNTBjMTIuOSAwIDI0LjctNC45IDMzLjYtMTNsMjguMyAyOC4zYzIgMiA1LjEgMiA3LjEgMHMyLTUuMSAwLTcuMWwtMjguMy0yOC4zYzguMS04LjkgMTMtMjAuNyAxMy0zMy42IDAtMjcuNS0yMi40LTQ5LjktNTAtNDkuOXptMCA4MGMtMTYuNSAwLTMwLTEzLjUtMzAtMzBzMTMuNS0zMCAzMC0zMCAzMCAxMy41IDMwIDMwLTEzLjUgMzAtMzAgMzB6Ii8+PC9zdmc+" alt="尔升网络" id="company-logo">
+                <h2>客户管理系统</h2>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> 用户名</label>
+                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <label for="role"><i class="fas fa-user-tag"></i> 角色</label>
+                    <select id="role" name="role" required>
+                        <option value="">请选择角色</option>
+                        <option value="customer_service">客服</option>
+                        <option value="admin">管理员</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> 登录系统</button>
+                <p class="register-link">
+                    还没有账号？<a href="#" onclick="showRegister()">立即注册</a>
+                </p>
+            </form>
+
+            <form id="registerForm" style="display: none;">
+                <div class="login-header">
+                    <h2>注册新账号</h2>
+                </div>
+                <div class="form-group">
+                    <label for="regUsername"><i class="fas fa-user"></i> 用户名</label>
+                    <input type="text" id="regUsername" name="username" required placeholder="请设置用户名">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword"><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="regPassword" name="password" required placeholder="请设置密码">
+                </div>
+                <div class="form-group">
+                    <label for="regRole"><i class="fas fa-user-tag"></i> 角色</label>
+                    <select id="regRole" name="role" required>
+                        <option value="">请选择角色</option>
+                        <option value="customer_service">客服</option>
+                        <option value="admin">管理员</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-user-plus"></i> 注册账号</button>
+                <p class="register-link">
+                    已有账号？<a href="#" onclick="showLogin()">返回登录</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 尔升网络 版权所有</p>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/announcements.js"></script>
+    <script src="../modern-ui/js/modern-components.js"></script>
+    <script>
+        // 登录页面特定脚本
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加登录表单动画效果
+            const loginForm = document.getElementById('loginForm');
+            loginForm.classList.add('fade-in');
+            
+            // 登录按钮悬停效果增强
+            const loginButton = loginForm.querySelector('.btn-primary');
+            loginButton.addEventListener('mouseenter', function() {
+                this.innerHTML = '<i class="fas fa-sign-in-alt"></i> 立即登录';
+            });
+            
+            loginButton.addEventListener('mouseleave', function() {
+                this.innerHTML = '<i class="fas fa-sign-in-alt"></i> 登录系统';
+            });
+            
+            // 表单输入增强
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                // 聚焦时添加高亮效果
+                input.addEventListener('focus', function() {
+                    const formGroup = this.closest('.form-group');
+                    formGroup.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    const formGroup = this.closest('.form-group');
+                    formGroup.classList.remove('focused');
+                });
+            });
+        });
+        
+        // 显示注册表单
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            const registerForm = document.getElementById('registerForm');
+            registerForm.style.display = 'block';
+            registerForm.classList.add('fade-in');
+        }
+        
+        // 显示登录表单
+        function showLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            const loginForm = document.getElementById('loginForm');
+            loginForm.style.display = 'block';
+            loginForm.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>
