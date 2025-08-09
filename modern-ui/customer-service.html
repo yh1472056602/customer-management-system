@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客服工作台 - 尔升网络</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar" id="announcementBar">
+        <div class="announcement-content">
+            <span id="announcementText">欢迎使用尔升网络客户管理系统</span>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMTUwIj48c3R5bGU+LnN0MHtmaWxsOiMxYTU2ZGJ9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTAwIDEwYy00OS43IDAtOTAgNDAuMy05MCA5MHM0MC4zIDkwIDkwIDkwIDkwLTQwLjMgOTAtOTAtNDAuMy05MC05MC05MHptMCAxNjBjLTM4LjYgMC03MC0zMS40LTcwLTcwczMxLjQtNzAgNzAtNzAgNzAgMzEuNCA3MCA3MC0zMS40IDcwLTcwIDcweiIvPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMDAgNTBjLTI3LjYgMC01MCAyMi40LTUwIDUwczIyLjQgNTAgNTAgNTBjMTIuOSAwIDI0LjctNC45IDMzLjYtMTNsMjguMyAyOC4zYzIgMiA1LjEgMiA3LjEgMHMyLTUuMSAwLTcuMWwtMjguMy0yOC4zYzguMS04LjkgMTMtMjAuNyAxMy0zMy42IDAtMjcuNS0yMi40LTQ5LjktNTAtNDkuOXptMCA4MGMtMTYuNSAwLTMwLTEzLjUtMzAtMzBzMTMuNS0zMCAzMC0zMCAzMCAxMy41IDMwIDMwLTEzLjUgMzAtMzAgMzB6Ii8+PC9zdmc+" alt="尔升网络" class="company-logo">
+                <span class="logo-text">尔升网络</span>
+            </div>
+            <div class="nav-links">
+                <button onclick="showSection('add-customer')" class="nav-btn active"><i class="fas fa-user-plus"></i> 添加客户</button>
+                <button onclick="showSection('view-data')" class="nav-btn"><i class="fas fa-chart-bar"></i> 查看数据</button>
+                <button onclick="showSection('private-domain')" class="nav-btn"><i class="fas fa-users"></i> 私域数据</button>
+                <button onclick="logout()" class="nav-btn logout-btn"><i class="fas fa-sign-out-alt"></i> 退出登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="page-title"><i class="fas fa-headset"></i> 客服工作台</h2>
+        
+        <!-- 添加客户 -->
+        <div id="add-customer" class="section active">
+            <h3><i class="fas fa-user-plus"></i> 添加订单信息（自由打印模板格式）</h3>
+            <form id="customerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerName">收件人姓名 <span style="color: var(--danger-color);">*</span></label>
+                        <input type="text" id="customerName" required placeholder="请输入收件人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">收件人手机/电话</label>
+                        <input type="tel" id="customerPhone" placeholder="请输入收件人手机或电话">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerAddress">收件人完整地址（智能解析）</label>
+                        <textarea id="customerAddress" rows="3" placeholder="请输入完整地址，系统将智能解析为省市区和详细地址"></textarea>
+                        <button type="button" onclick="parseAddress()" class="parse-btn"><i class="fas fa-magic"></i> Kimi AI智能解析</button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="recipientProvince">收件人省</label>
+                        <input type="text" id="recipientProvince" placeholder="省份（自动解析）">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientCity">收件人市</label>
+                        <input type="text" id="recipientCity" placeholder="城市（自动解析）">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientDistrict">收件人区</label>
+                        <input type="text" id="recipientDistrict" placeholder="区县（自动解析）">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="detailedAddress">收件人详细地址</label>
+                        <input type="text" id="detailedAddress" placeholder="详细地址（自动解析）">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">物品名称 <span style="color: var(--danger-color);">*</span></label>
+                        <input type="text" id="productName" required placeholder="请输入物品名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">数量</label>
+                        <input type="number" id="quantity" value="1" min="1" placeholder="请输入数量">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productAmount">金额（元）</label>
+                        <input type="number" id="productAmount" step="0.01" min="0" placeholder="请输入金额">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCode">商品编码</label>
+                        <input type="text" id="productCode" placeholder="可选，商品编码">
+                    </div>
+                    <div class="form-group">
+                        <label for="productAttributes">销售属性</label>
+                        <input type="text" id="productAttributes" placeholder="可选，如颜色、尺寸等">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="remarks">备注</label>
+                        <textarea id="remarks" rows="2" placeholder="可选，订单备注信息"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="ai-toggle">
+                            <label>
+                                <input type="checkbox" id="enableAI" checked>
+                                <span class="slider"></span>
+                                <span>启用AI辅助</span>
+                                <i class="fas fa-robot ai-icon"></i>
+                            </label>
+                            <div class="tooltip">启用AI辅助功能可以智能解析地址、自动填充信息、检测异常数据</div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存订单</button>
+            </form>
+        </div>
+
+
+
+        <!-- 查看数据 -->
+        <div id="view-data" class="section">
+            <h3><i class="fas fa-chart-bar"></i> 数据统计</h3>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h4>今日订单</h4>
+                    <p id="todayOrders">0</p>
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>本周订单</h4>
+                    <p id="weekOrders">0</p>
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>本月订单</h4>
+                    <p id="monthOrders">0</p>
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-card">
+                    <h4>总销售额</h4>
+                    <p id="totalSales">¥0.00</p>
+                    <i class="fas fa-yen-sign"></i>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">开始日期</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">结束日期</label>
+                        <input type="date" id="endDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="searchKeyword">关键词搜索</label>
+                        <input type="text" id="searchKeyword" placeholder="收件人/电话/地址/商品">
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button onclick="searchOrders()" class="search-btn"><i class="fas fa-search"></i> 搜索</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-table">
+                <h4><i class="fas fa-list"></i> 订单列表</h4>
+                <div class="table-actions">
+                    <button onclick="exportOrders()" class="action-btn excel-btn"><i class="fas fa-file-excel"></i> 导出Excel</button>
+                </div>
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>订单ID</th>
+                            <th>收件人</th>
+                            <th>电话</th>
+                            <th>地址</th>
+                            <th>商品</th>
+                            <th>数量</th>
+                            <th>金额</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                    </tbody>
+                </table>
+                <div id="pagination" class="pagination">
+                    <!-- 分页控件将在这里生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 私域数据 -->
+        <div id="private-domain" class="section">
+            <h3><i class="fas fa-users"></i> 私域数据管理</h3>
+            
+            <div class="private-form">
+                <h4><i class="fas fa-user-tag"></i> 添加私域客户</h4>
+                <form id="privateCustomerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="privateName">客户姓名 <span style="color: var(--danger-color);">*</span></label>
+                            <input type="text" id="privateName" required placeholder="请输入客户姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="privatePhone">联系电话 <span style="color: var(--danger-color);">*</span></label>
+                            <input type="tel" id="privatePhone" required placeholder="请输入联系电话">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="privateSource">客户来源</label>
+                            <select id="privateSource">
+                                <option value="">请选择来源</option>
+                                <option value="微信">微信</option>
+                                <option value="抖音">抖音</option>
+                                <option value="小红书">小红书</option>
+                                <option value="电话">电话</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="privateType">客户类型</label>
+                            <select id="privateType">
+                                <option value="">请选择类型</option>
+                                <option value="新客户">新客户</option>
+                                <option value="老客户">老客户</option>
+                                <option value="VIP客户">VIP客户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="privateRemark">备注信息</label>
+                            <textarea id="privateRemark" rows="2" placeholder="请输入备注信息"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存客户</button>
+                </form>
+            </div>
+            
+            <div class="data-table">
+                <h4><i class="fas fa-address-book"></i> 私域客户列表</h4>
+                <div class="filter-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="privateSearchKeyword">关键词搜索</label>
+                            <input type="text" id="privateSearchKeyword" placeholder="姓名/电话/备注">
+                        </div>
+                        <div class="form-group">
+                            <label for="privateSourceFilter">客户来源</label>
+                            <select id="privateSourceFilter">
+                                <option value="">全部来源</option>
+                                <option value="微信">微信</option>
+                                <option value="抖音">抖音</option>
+                                <option value="小红书">小红书</option>
+                                <option value="电话">电话</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="align-self: flex-end;">
+                            <button onclick="searchPrivateCustomers()" class="search-btn"><i class="fas fa-search"></i> 搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <table id="privateCustomersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>来源</th>
+                            <th>类型</th>
+                            <th>订单数</th>
+                            <th>总消费</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="privateCustomersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 尔升网络 版权所有</p>
+    </div>
+
+    <!-- 编辑订单模态框 -->
+    <div id="editOrderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editOrderModal')">&times;</span>
+            <h3><i class="fas fa-edit"></i> 编辑订单</h3>
+            <form id="editOrderForm">
+                <input type="hidden" id="editOrderId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editCustomerName">收件人姓名</label>
+                        <input type="text" id="editCustomerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCustomerPhone">收件人手机/电话</label>
+                        <input type="tel" id="editCustomerPhone">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProvince">省</label>
+                        <input type="text" id="editProvince">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCity">市</label>
+                        <input type="text" id="editCity">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDistrict">区</label>
+                        <input type="text" id="editDistrict">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editDetailedAddress">详细地址</label>
+                        <input type="text" id="editDetailedAddress">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProductName">物品名称</label>
+                        <input type="text" id="editProductName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuantity">数量</label>
+                        <input type="number" id="editQuantity" min="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProductAmount">金额（元）</label>
+                        <input type="number" id="editProductAmount" step="0.01" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editRemarks">备注</label>
+                        <textarea id="editRemarks" rows="2"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存修改</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../modern-ui/js/compatibility.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/customer-service.js"></script>
+    <script src="../js/announcements.js"></script>
+    <script src="../modern-ui/js/modern-components.js"></script>
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化页面效果
+            initPageEffects();
+        });
+        
+        // 初始化页面效果
+        function initPageEffects() {
+            // 添加表单输入增强
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                // 聚焦时添加高亮效果
+                input.addEventListener('focus', function() {
+                    const formGroup = this.closest('.form-group');
+                    if (formGroup) formGroup.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    const formGroup = this.closest('.form-group');
+                    if (formGroup) formGroup.classList.remove('focused');
+                });
+            });
+            
+            // 添加按钮悬停效果
+            const buttons = document.querySelectorAll('.btn-primary, .action-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('hover-effect');
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('hover-effect');
+                });
+            });
+        }
+        
+        // 显示不同的区域
+        function showSection(sectionId) {
+            // 隐藏所有区域
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的区域
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 找到并激活对应的导航按钮
+            document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+        
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

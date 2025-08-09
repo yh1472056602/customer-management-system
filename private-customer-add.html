@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加私域客户 - 尔升网络</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="css/mobile-optimized.css">
+    <link rel="stylesheet" href="css/private-data.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>添加私域客户</h1>
+            <a href="customer-service.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 返回客服工作台
+            </a>
+        </div>
+        
+        <div class="private-data-section">
+            <form id="privateCustomerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateName">客户姓名 <span style="color: var(--danger-color);">*</span></label>
+                        <input type="text" id="privateName" required placeholder="请输入客户姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="privatePhone">联系电话 <span style="color: var(--danger-color);">*</span></label>
+                        <input type="tel" id="privatePhone" required placeholder="请输入联系电话">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privatePhoneNumber">手机编号/标识 <span style="color: red;">*</span></label>
+                        <input type="text" id="privatePhoneNumber" required placeholder="请输入手机编号或标识">
+                    </div>
+                    <div class="form-group">
+                        <label for="privateSource">客户来源</label>
+                        <select id="privateSource">
+                            <option value="">请选择来源</option>
+                            <option value="微信">微信</option>
+                            <option value="抖音">抖音</option>
+                            <option value="小红书">小红书</option>
+                            <option value="电话">电话</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateType">客户类型</label>
+                        <select id="privateType">
+                            <option value="">请选择类型</option>
+                            <option value="新客户">新客户</option>
+                            <option value="老客户">老客户</option>
+                            <option value="VIP客户">VIP客户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateRemark">备注信息</label>
+                        <textarea id="privateRemark" rows="2" placeholder="请输入备注信息"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存私域客户</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="../modern-ui/js/compatibility.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="js/phone-number-manager.js"></script>
+    
+    <script>
+        // 检查用户是否已登录
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查用户是否已登录
+            checkAuth();
+            
+            // 表单提交处理
+            const privateCustomerForm = document.getElementById('privateCustomerForm');
+            if (privateCustomerForm) {
+                privateCustomerForm.addEventListener('submit', addPrivateCustomer);
+            }
+        });
+        
+        // 添加私域客户
+        async function addPrivateCustomer(e) {
+            e.preventDefault();
+            
+            // 收集表单数据
+            const privateData = {
+                name: document.getElementById('privateName').value,
+                phone: document.getElementById('privatePhone').value,
+                phone_number: document.getElementById('privatePhoneNumber').value,
+                source: document.getElementById('privateSource').value,
+                type: document.getElementById('privateType').value,
+                remark: document.getElementById('privateRemark').value
+            };
+            
+            console.log('准备提交私域客户数据:', privateData);
+            
+            try {
+                // 获取认证头
+                const token = localStorage.getItem('token');
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+                
+                // 保存私域客户数据
+                const response = await fetch('/api/private-customers', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(privateData)
+                });
+                
+                if (response.ok) {
+                    alert('私域客户添加成功！');
+                    document.getElementById('privateCustomerForm').reset();
+                } else {
+                    const error = await response.json();
+                    alert('添加失败: ' + error.error);
+                }
+            } catch (error) {
+                alert('添加失败: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

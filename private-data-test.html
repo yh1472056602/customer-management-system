@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私域数据测试 - 尔升网络</title>
+    <link rel="stylesheet" href="../modern-ui/css/modern-theme.css">
+    <link rel="stylesheet" href="css/private-data.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn-test {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>私域数据功能测试</h1>
+        
+        <div class="test-section">
+            <h2>测试1: 私域数据表单显示</h2>
+            <p>这是从添加客户页面复制的私域数据表单部分：</p>
+            
+            <div class="private-data-section">
+                <h4><i class="fas fa-users"></i> 私域数据管理</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateName">客户姓名 <span style="color: red;">*</span></label>
+                        <input type="text" id="privateName" placeholder="请输入客户姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="privatePhone">联系电话 <span style="color: red;">*</span></label>
+                        <input type="tel" id="privatePhone" placeholder="请输入联系电话">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateSource">客户来源</label>
+                        <select id="privateSource">
+                            <option value="">请选择来源</option>
+                            <option value="微信">微信</option>
+                            <option value="抖音">抖音</option>
+                            <option value="小红书">小红书</option>
+                            <option value="电话">电话</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="privateType">客户类型</label>
+                        <select id="privateType">
+                            <option value="">请选择类型</option>
+                            <option value="新客户">新客户</option>
+                            <option value="老客户">老客户</option>
+                            <option value="VIP客户">VIP客户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="privateRemark">备注信息</label>
+                        <textarea id="privateRemark" rows="2" placeholder="请输入备注信息"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="private-data-toggle">
+                            <label>
+                                <input type="checkbox" id="enablePrivateData" checked>
+                                <span class="slider"></span>
+                                <span>同时保存为私域客户</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>测试2: API测试</h2>
+            <p>测试私域客户API是否正常工作：</p>
+            <button id="testApiBtn" class="btn-test">测试API</button>
+            <div id="apiResult" class="result">
+                <p>点击按钮测试API...</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>测试3: 数据库表检查</h2>
+            <p>检查数据库表是否正确创建：</p>
+            <button id="testDbBtn" class="btn-test">检查数据库表</button>
+            <div id="dbResult" class="result">
+                <p>点击按钮检查数据库表...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 测试API
+        document.getElementById('testApiBtn').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.innerHTML = '<p>正在测试API...</p>';
+            
+            try {
+                // 获取认证头
+                const token = localStorage.getItem('token');
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+                
+                // 测试获取私域客户列表
+                const response = await fetch('/api/private-customers', {
+                    headers: headers
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <p>API测试成功!</p>
+                        <p>状态码: ${response.status}</p>
+                        <p>返回数据:</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p>API测试失败!</p>
+                        <p>状态码: ${response.status}</p>
+                        <p>错误信息: ${await response.text()}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p>API测试出错!</p>
+                    <p>错误信息: ${error.message}</p>
+                `;
+            }
+        });
+        
+        // 测试数据库表
+        document.getElementById('testDbBtn').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('dbResult');
+            resultDiv.innerHTML = '<p>正在检查数据库表...</p>';
+            
+            try {
+                // 获取认证头
+                const token = localStorage.getItem('token');
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                };
+                
+                // 发送请求到后端检查表结构
+                const response = await fetch('/api/check-table-structure?table=private_customers', {
+                    headers: headers
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <p>数据库表检查成功!</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p>数据库表检查失败!</p>
+                        <p>状态码: ${response.status}</p>
+                        <p>错误信息: ${await response.text()}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p>数据库表检查出错!</p>
+                    <p>错误信息: ${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
